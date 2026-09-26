@@ -37,17 +37,17 @@ def save_password_to_file():
     while True:
         choice = input("Choose one version from the latest generation: ")
         if choice.capitalize()=="Strong":
-            with open("data/password_from_generator.txt", "w",encoding="utf-8") as save_password:
+            with open("password_from_generator.txt", "w",encoding="utf-8") as save_password:
                 save_password.write(passwords["Strong"])
                 print("Saved!")
             break
         elif choice.capitalize()=="Medium":
-            with open("data/password_from_generator.txt", "w") as save_password:
+            with open("password_from_generator.txt", "w") as save_password:
                 save_password.write(passwords["Medium"])
                 print("Saved!")
             break
         elif choice.capitalize()=="Easy":
-            with open("data/password_from_generator.txt", "w") as save_password:
+            with open("password_from_generator.txt", "w") as save_password:
                 save_password.write(passwords["Easy"])
                 print("Saved!")
             break

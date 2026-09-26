@@ -5,66 +5,69 @@ from password_generator import (generate_strong_password,
                                 save_passwords,
                                 print_passwords,
                                 )
-def for_pin():
-    lista=[]
-    for x in range(1,10000):
-        lista.append(str(x))
-    return lista
-pin_list=for_pin()
-length_pin=open("data/pin.txt","r")
-def if_pin_doesnt_exist():
-    if len(length_pin.read())<=0:
+# def for_pin():
+#     lista=[]
+#     for x in range(1,10000):
+#         lista.append(str(x))
+#     return lista
+# pin_list=for_pin()
+with open("pin.txt","r") as pin_file:
+    pin_length=pin_file.read()
+def create_pin():
+    if len(pin_length)<=0:
         print("Create PIN for password manager")
-        for x in range(1, 4):
-            pinc = input("PIN:")
-            if len(pinc) != 4 or pinc not in pin_list:
-                print("Please enter a 4 digit PIN number.")
-            else:
-                return pinc
+        for x in range(0, 3):
             if x == 3:
                 print("Error!")
                 break
+            try:
+                pinc = int(input("PIN:"))
+                if len(str(pinc))!=4:
+                    print("The PIN most consists of 4 digits.")
+            except ValueError:
+                print("A PIN cannnot contain letters.")
+            else:
+                 if len(str(pinc))==4:
+                     with open("pin.txt", "w") as pin_write:
+                         pin_write.write(str(pinc))
+                     print("Saved!")
+                     return pinc
         return "Error!"
     else:
         return ""
-user_pin=if_pin_doesnt_exist()
+user_pin=create_pin()
+with open("pin.txt", "r") as pin_file2:
+    pin_verify = pin_file2.read()
 def if_pin_exist():
-    verify=open("data/pin.txt","r")
-    read=verify.read()
-    if user_pin == "":
-        for z in range(1,4):
-            pinc=input("PIN:")
-            if len(pinc) != 4 or pinc not in pin_list or pinc != read:
-                print("Wrong PIN entered!")
-            else:
-                print("Success!")
-                return pinc
-            if z == 3:
-                print("Error!")
-                break
-    return "Error!"
+        for z in range(0, 3):
+            try:
+                if user_pin == "":
+                        pinc = int(input("PIN:"))
+                        if str(pinc)!=pin_verify:
+                            print("Wrong PIN!")
+                            if len(str(pinc)) != 4:
+                                print("The PIN most consists of 4 digits.")
+                        else:
+                            print("Success!")
+                            return pinc
+            except ValueError:
+                print("A PIN cannnot contain letters.")
+
+        return "Error!"
 pin=if_pin_exist()
-def return_true_false(verify):
-    if verify!="Error!" and user_pin != "Error!" or len(user_pin) == 4 and user_pin in pin_list:
+print(pin,user_pin)
+def true_false(check_error):
+    if check_error!="Error!" and user_pin != "Error!":
         return True
     else:
         return False
-true_false=return_true_false(pin)
-def create_pin(pincode):
-    if len(user_pin) == 4 and user_pin in pin_list:
-        pin_open=open("data/pin.txt","w")
-        pin_open.write(pincode)
-        pin_open.close()
-        print("Saved!")
-    else:
-        print("",end="")
-create_pin(user_pin)
+boolean=true_false(pin)
 i=1
 def save_name_and_password(name,password):
-    text=open("data/passwords.txt","a")
+    text=open("passwords.txt","a")
     text.write(name+" - "+password+"\n")
     text.close()
-while true_false:
+while boolean:
     print("Item",i)
     Name=input("Name: ")
     generate_strong_password()
@@ -72,14 +75,14 @@ while true_false:
     generate_easy_password()
     save_passwords()
     print_passwords()
-    with open("data/password_from_generator.txt","r") as file:
+    with open("password_from_generator.txt","r") as file:
         password_from_generator=file.read()
     Password = password_from_generator
     save_name_and_password(Name,Password)
     Enter=input("Press enter to continue or space + enter to exit and save.")
     if Enter!=(""
                ""):
-        print('Your passwords are stored here: "data/password_manager.txt"')
+        print('Your passwords are stored here: "passwords.txt"')
         break
     else:
         print("")
